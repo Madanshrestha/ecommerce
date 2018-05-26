@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+<link rel="stylesheet" href="text/css", href="{% static 'style.css' %}">
+<div id='user_register' class="card card-header bg-light">
+        <h2 class="text-center" >Login</h2>
+</div>
+<div class="container">
+    {% if error_message %}
+    <div class="alert alert-danger">
+            {{error_message}}
+    </div>    
+    {% endif %}
+
+    <div class="col col-sm-4"><br>
+        <form method="post">{% csrf_token %}
+            <div class="form-inline">
+                Username: {{form.username}}
+                Password : {{form.password}}
+
+            </div>            
+            <input class="btn btn-default" value="Login" type="submit">
+        </form>
+    </div>
+    
+</div>
+
+{% endblock content %}

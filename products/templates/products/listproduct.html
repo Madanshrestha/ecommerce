@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">    
+        {% for obj in object_list %}
+            <div class="col col-sm-4">
+                <div class="card">
+                    <div class="card-header">
+                        {% if obj.image  %}
+                            <img src="{{obj.image.url}}" class="img-fluid"><br>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title">
+                            <a href="{{ obj.get_absolute_url }}">{{obj.title}}</a>
+                        </div>
+                    </div> 
+                    <div class="card-footer">{{obj.description|truncatewords:12}}</div>
+                    {% if forloop.counter|divisibleby:3 %}
+                        </div></div><div><hr></div>
+                    {% else %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
