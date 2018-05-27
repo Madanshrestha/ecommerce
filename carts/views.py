@@ -31,6 +31,6 @@ def cart_update(request):
         if product_obj in cart_obj.products.all():
             cart_obj.products.remove(product_obj)
         else:
-            cart_obj.products.add(product_obj) #products can also be added with the help of id as: cart_obj.products.add(1) 
+            cart_obj.products.add(product_obj) #products can also be added with the help of id as: cart_obj.products.add(1)
         request.session['cart_items'] = cart_obj.products.count()
     return redirect("cart:home")

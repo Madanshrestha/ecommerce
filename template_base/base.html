@@ -10,7 +10,7 @@
 </head>
 <body>
     {% block navbar %}
-        
+
     {% url 'home' as home_url %}
     {% url 'user_register' as register_url %}
     {% url 'user_login' as login_url %}
@@ -20,12 +20,12 @@
         <nav class="navbar navbar-expand-md bg-dark navbar-dark">
             <!-- Brand -->
             <a class="navbar-brand {% if request.path == home_url %}active{% endif %}" href="{{ home_url }}">Home</a>
-          
+
             <!-- Toggler/collapsibe Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
               <span class="navbar-toggler-icon"></span>
             </button>
-          
+
             <!-- Navbar links -->
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
               <ul class="navbar-nav">
@@ -39,7 +39,7 @@
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
-                    </li> 
+                    </li>
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == list_url %}active{% endif %}" href="{{ list_url }}">Products</a>

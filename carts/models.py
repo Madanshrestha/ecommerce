@@ -26,7 +26,7 @@ class CartManager(models.Manager):
 
     def new(self, user=None):
         print(user)
-        user_obj=None
+        user_obj = None
         if user is not None:
             if user.is_authenticated():
                 user_obj = user
