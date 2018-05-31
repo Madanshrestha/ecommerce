@@ -4,7 +4,9 @@ from django.views.generic import ListView
 from products.models import Product
 # Create your views here.
 
+
 class SearchProductView(ListView):
+
     template_name = 'search/snippets/view.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -19,4 +21,3 @@ class SearchProductView(ListView):
         if query is not None:
             return Product.objects.search(query)
         return Product.objects.featured()
-    

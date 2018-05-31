@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.db import models
 from django.db.models.signals import pre_save, post_save
-from .utils import unique_slug_generator
+from ecommerce.utils import unique_slug_generator
 
 # Create your models here.
 
@@ -16,7 +16,7 @@ def get_filename_ext(filepath):
 
 #changing the image name to reduce error caused by spacing or other factors related to file name
 def upload_image_path(instance, filename):
-    
+
     new_filename = random.randint(1,423432523)
     name, ext = get_filename_ext(filename)
     final_filename = '{new_filename}{ext}'.format(new_filename=new_filename, ext=ext)
@@ -33,7 +33,7 @@ class ProductQueryset(models.query.QuerySet):
     def search(self, query):
         lookups = (Q(title__icontains=query) |
         Q(description__icontains=query) |
-        Q(price__icontains=query) | 
+        Q(price__icontains=query) |
         Q(tag__title__icontains=query))
         return self.filter(lookups).distinct()
 
@@ -43,7 +43,7 @@ class ProductManager(models.Manager):
     # with this we will be able to write like Products.objects.all().featured()
     def get_queryset(self):
         return ProductQueryset(self.model, using=self.db)
-    
+
     def all(self):
         return self.get_queryset().active()
 
@@ -51,7 +51,7 @@ class ProductManager(models.Manager):
         return self.get_queryset().filter(featured=True)
 
     def get_by_id(self, id):
-        qs = self.get_queryset().filter(id=id) #self.get_queryset() is same as Products.objects 
+        qs = self.get_queryset().filter(id=id) #self.get_queryset() is same as Products.objects
         if qs.count() == 1:
             return qs.first() #getting the individual objects
         return None
