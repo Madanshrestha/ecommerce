@@ -1,61 +1,58 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, get_user_model
 from django.views.generic import FormView, View
+from django.utils.http import is_safe_url
+
 from .forms import RegisterForm, LoginForm
 
 # Create your views here.
 
-class RegisterView(FormView):
-    template_name = "user_reg.html"
 
-    def get(self, request):
-        form = RegisterForm()
-    
-        return render(request, self.template_name, {'form':form})
+def login_page(request):
 
-    def post(self, request):
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = User()
-            user.first_name = form.cleaned_data['first_name']
-            user.last_name = form.cleaned_data['last_name']
-            user.username = form.cleaned_data['username']
-            user.email = form.cleaned_data['email']
-            user.set_password(form.cleaned_data['password2'])
-            user.save()
+    form = LoginForm(request.POST or None)
+    context = {
+        'form': form
+    }
 
-            return redirect("user_login")
+    print("User logged in")
+    next_ = request.GET.get('next')
+    next_post = request.POST.get('next')
+    redirect_path = next_ or next_post or None
+    if form.is_valid():
+        print(form.cleaned_data)
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
 
-        return redirect("user_register")
+        user = authenticate(request, username=username, password=password)
+        print(user)
+        if user is not None:
+            auth_login(request, user)
+            if is_safe_url(redirect_path, request.get_host()):
+                return redirect(redirect_path)
+            else:
+                return redirect("home")
+        else:
+            print("error")
+    return render(request, 'user_log.html', context)
 
-class LoginView(FormView):
-    template_name = "user_log.html"
 
-    def get(self, request):
-        form = LoginForm()
+User = get_user_model()
 
-        return render(request, self.template_name, {'form':form})
 
-    def post(self, request):
-        form = LoginForm(request.POST)
+def register_page(request):
+    form = RegisterForm(request.POST or None)
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+    context = {
+        "form": form
+    }
 
-            auth_user = authenticate(username=username, password=password)
+    if form.is_valid():
+        username = form.cleaned_data.get('username')
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password')
+        new_user = User.objects.create_user(username, email, password)
+        print(new_user)
 
-            if not auth_user:
-                error_message = "Username or Password didn't match"
-                form = LoginForm()
-                return render(request, self.template_name, {'form':form, 'error_message':error_message})
-
-            auth_login(request, auth_user)
-            return redirect('home')
-
-class LogoutView(View):
-    
-    def get(self, request):
-        auth_logout(request)
-        return redirect("user_login")
+    return render(request, 'user_reg.html', context)

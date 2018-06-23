@@ -15,6 +15,7 @@
     {% url 'home' as home_url %}
     {% url 'user_register' as register_url %}
     {% url 'user_login' as login_url %}
+    {% url 'user_logout' as logout_url %}
     {% url 'product:list' as list_url %}
     {% url 'cart:home' as cart_url %}
 
@@ -49,7 +50,7 @@
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
+                    <a class="nav-link" href="{{ logout_url }}">Logout</a>
                 </li>
                 {% endif %}
               </ul>
