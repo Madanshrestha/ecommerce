@@ -5,6 +5,16 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class GuestForm(forms.Form):
+    email = forms.EmailField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Username',
+            'style': 'margin-bottom: 5px; margin-right: 17px; margin-left: 6px',
+        })
+    )
+
+
 class RegisterForm(forms.Form):
 
     username = forms.CharField(max_length=50, widget=forms.TextInput(
@@ -12,8 +22,8 @@ class RegisterForm(forms.Form):
             'class': 'form-control',
             'placeholder': 'Username',
             'style': 'margin-bottom: 5px; margin-right: 17px; margin-left: 6px',
-        }
-    ))
+        })
+    )
     email = forms.EmailField(widget=forms.TextInput(
         attrs={
             'class': 'form-control',
